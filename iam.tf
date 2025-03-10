@@ -5,7 +5,6 @@ resource "aws_iam_openid_connect_provider" "this" {
     "sts.amazonaws.com",
   ]
 
-  thumbprint_list = ["ffffffffffffffffffffffffffffffffffffffff"]
 }
 
 data "aws_iam_policy_document" "oidc" {
@@ -25,7 +24,7 @@ data "aws_iam_policy_document" "oidc" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:YourOrg/*"]
+      values   = ["repo:awscommunitymx"]
       variable = "token.actions.githubusercontent.com:sub"
     }
   }
@@ -43,6 +42,8 @@ data "aws_iam_policy_document" "deploy" {
       "ecr:*",
     ]
     resources = ["*"]
+    
+    
   }
 }
 
@@ -56,3 +57,27 @@ resource "aws_iam_role_policy_attachment" "attach-deploy" {
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.deploy.arn
 }
+
+data "aws_iam_policy_document" "cdk" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole",
+    ]
+    resources = [
+      "arn:aws:iam::*:role/cdk-*",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "cdk" {
+  name        = "cdk-policy"
+  description = "Policy used for CDK deployments"
+  policy      = data.aws_iam_policy_document.cdk.json
+}
+
+resource "aws_iam_role_policy_attachment" "attach-cdk" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.cdk.arn
+}
+
