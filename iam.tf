@@ -35,29 +35,6 @@ resource "aws_iam_role" "this" {
   assume_role_policy = data.aws_iam_policy_document.oidc.json
 }
 
-data "aws_iam_policy_document" "deploy" {
-  statement {
-    effect  = "Allow"
-    actions = [
-      "ecr:*",
-    ]
-    resources = ["*"]
-    
-    
-  }
-}
-
-resource "aws_iam_policy" "deploy" {
-  name        = "ci-deploy-policy"
-  description = "Policy used for deployments on CI"
-  policy      = data.aws_iam_policy_document.deploy.json
-}
-
-resource "aws_iam_role_policy_attachment" "attach-deploy" {
-  role       = aws_iam_role.this.name
-  policy_arn = aws_iam_policy.deploy.arn
-}
-
 data "aws_iam_policy_document" "cdk" {
   statement {
     effect = "Allow"
