@@ -1,11 +1,16 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 resource "aws_iam_openid_connect_provider" "this" {
   url = "https://token.actions.githubusercontent.com"
 
   client_id_list = [
     "sts.amazonaws.com",
   ]
-
 }
+
+data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "oidc" {
   statement {
@@ -24,7 +29,7 @@ data "aws_iam_policy_document" "oidc" {
 
     condition {
       test     = "StringLike"
-      values   = ["repo:awscommunitymx"]
+      values   = ["repo:awscommunitymx/*"]
       variable = "token.actions.githubusercontent.com:sub"
     }
   }
@@ -42,7 +47,7 @@ data "aws_iam_policy_document" "cdk" {
       "sts:AssumeRole",
     ]
     resources = [
-      "arn:aws:iam::*:role/cdk-*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/cdk-*",
     ]
   }
 }
