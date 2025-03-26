@@ -60,4 +60,13 @@ resource "aws_iam_role_policy_attachment" "attach-cdk" {
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.cdk.arn
 }
+resource "aws_iam_role_policy_attachment" "appsync_admin_attachment" {
+  role       = "github_oidc_role"
+  policy_arn = "arn:aws:iam::aws:policy/AWSAppSyncAdministrator"
+}
+
+resource "aws_iam_role_policy_attachment" "cloudformation_full_access_attachment" {
+  role       = "github_oidc_role"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
+}
 
