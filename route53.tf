@@ -7,21 +7,9 @@ resource "aws_route53_zone" "dev" {
 }
 
 data "cloudflare_zone" "main_zone" {
-  zone_id = ""
+  zone_id = "914f895b638c5fd3731948303b6d0b26"
 }
 
-
-# Outputs
-output "app_zone_id" {
-  description = "ID de la zona alojada de Route53"
-  value       = aws_route53_zone.dev.zone_id
-}
-
-output "app_zone_name_servers" {
-  description = "Servidores de nombres asignados a la zona alojada"
-  value       = aws_route53_zone.dev.name_servers
-}
-# 3. Update Cloudflare NS Records
 resource "cloudflare_dns_record" "ns" {
   for_each = toset(aws_route53_zone.dev.name_servers) # Convierte la lista en un conjunto para iterar
   zone_id = data.cloudflare_zone.main_zone.zone_id
