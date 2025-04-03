@@ -17,7 +17,4 @@ terraform {
   }
 }
 
-provider "cloudflare" {
-  api_token = ""
-}
-
+provider "cloudflare" {}
