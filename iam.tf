@@ -59,28 +59,28 @@ resource "aws_iam_role_policy_attachment" "attach-cdk" {
   policy_arn = aws_iam_policy.cdk.arn
 }
 resource "aws_iam_role_policy_attachment" "appsync_admin_attachment" {
-  role       =  aws_iam_role.this.name
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/AWSAppSyncAdministrator"
 }
 
 resource "aws_iam_role_policy_attachment" "cloudformation_full_access_attachment" {
-  role       =  aws_iam_role.this.name
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "Lambda_Full_Access_attachment" {
-  role       =  aws_iam_role.this.name
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonS3FullAccess_attachment" {
-  role       =  aws_iam_role.this.name
+  role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 resource "aws_iam_policy" "dynamodb_full_access" {
   name        = "dynamodb-full-access-policy"
   description = "Policy for full access to DynamoDB"
-  policy      = jsonencode({
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
