@@ -96,3 +96,29 @@ resource "aws_iam_role_policy_attachment" "dynamodb_full_access_attachment" {
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.dynamodb_full_access.arn
 }
+
+resource "aws_iam_policy" "cognito_access" {
+  name        = "cognito-access-policy"
+  description = "Policy for Cognito User Pool access (non-production)"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "AllowCognitoUserPoolAccess"
+        Effect   = "Allow"
+        Action   = ["cognito-idp:*"]
+        Resource = "*"
+        Condition = {
+          StringNotEquals = {
+            "aws:ResourceTag/Environment": "production"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "cognito_access_attachment" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.cognito_access.arn
+}
