@@ -122,3 +122,23 @@ resource "aws_iam_role_policy_attachment" "cognito_access_attachment" {
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.cognito_access.arn
 }
+
+resource "aws_iam_policy" "step_functions_access" {
+  name        = "step-functions-access-policy"
+  description = "Policy for AWS Step Functions full access"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "states:*"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "step_functions_access_attachment" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.step_functions_access.arn
+}
