@@ -30,3 +30,14 @@ resource "aws_secretsmanager_secret" "algolia_api_key" {
     CreatedBy   = "terraform"
   }
 }
+
+resource "aws_secretsmanager_secret" "twilio_secrets" {
+  name        = "twilio-credentials"
+  description = "Twilio secrets for SMS functionality"
+  
+  tags = {
+    Name        = "twilio-credentials"
+    Environment = "production"
+    CreatedBy   = "terraform"
+  }
+}
